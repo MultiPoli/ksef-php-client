@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaRR;
 
-use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\AbstractFakturaFixture;
-
 final class FakturaSprzedazyTowaruRolniczegoFixture extends AbstractFakturaFixture
 {
     /**
@@ -83,7 +81,7 @@ final class FakturaSprzedazyTowaruRolniczegoFixture extends AbstractFakturaFixtu
                 'rachunekBankowy1' => [
                     [
                         'nrRBGroup' => [
-                            'NrRB' => '11111111111111111111111111',
+                            'nrRB' => '11111111111111111111111111',
                         ],
                         'nazwaBanku' => 'Bank 1'
                     ],
@@ -91,7 +89,7 @@ final class FakturaSprzedazyTowaruRolniczegoFixture extends AbstractFakturaFixtu
                 'rachunekBankowy2' => [
                     [
                         'nrRBGroup' => [
-                            'NrRB' => '99999999999999999999999999',
+                            'nrRB' => '99999999999999999999999999',
                         ],
                         'nazwaBanku' => 'Bank 2'
                     ],

@@ -36,9 +36,9 @@ final class Naglowek extends AbstractDTO implements DomSerializableInterface
         $dom->appendChild($naglowek);
 
         $kodFormularza = $dom->createElementNS((string) XmlNamespace::FaRr1->value, 'KodFormularza');
-        $kodFormularza->setAttribute('kodSystemowy', sprintf('%s(%s)', $this->wariantFormularza->getValue(), $this->wariantFormularza->getWariantFormularza()));
+        $kodFormularza->setAttribute('kodSystemowy', preg_replace('/\s+/', '', (string) $this->wariantFormularza->value));
         $kodFormularza->setAttribute('wersjaSchemy', $this->wariantFormularza->getSchemaVersion());
-        $kodFormularza->appendChild($dom->createTextNode($this->wariantFormularza->getValue()));
+        $kodFormularza->appendChild($dom->createTextNode('FA_RR'));
 
         $naglowek->appendChild($kodFormularza);
 

@@ -10,7 +10,7 @@ use N1ebieski\KSEFClient\Support\Utility;
 $config = [
     'xsds' => [
         'faktura' => 'http://crd.gov.pl/wzor/2025/06/25/13775/schemat.xsd',
-        'faktura_rr' => 'https://ksef.podatki.gov.pl/media/oicluwg2/schemat_fa_vat_rr-1-_v1-0.xsd',
+        'faktura-rr' => 'http://crd.gov.pl/wzor/2026/02/17/14164/schemat.xsd',
     ],
 
     'resourcesPath' => Utility::basePath('resources/xsd'),
