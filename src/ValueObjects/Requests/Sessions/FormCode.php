@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\ValueObjects\Requests\Sessions;
 
 use N1ebieski\KSEFClient\Contracts\EnumInterface;
+use N1ebieski\KSEFClient\Support\Utility;
 
 enum FormCode: string implements EnumInterface
 {
@@ -21,6 +22,14 @@ enum FormCode: string implements EnumInterface
         return match ($this) {
             self::Fa3, self::FaRr1 => '1-0E',
             self::Pef3, self::KorPef3 => '2-1',
+        };
+    }
+
+    public function getSchemaPath(): string
+    {
+        return match ($this) {
+            self::Fa3, self::Pef3, self::KorPef3 => Utility::basePath('resources/xsd/faktura/schemat.xsd'),
+            self::FaRr1 => Utility::basePath('resources/xsd/faktura_rr/schemat_fa_vat_rr-1-_v1-0.xsd'),
         };
     }
 

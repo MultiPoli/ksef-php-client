@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\DTOs\Requests\Sessions\FakturaRR;
 
 use DOMDocument;
-use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 use N1ebieski\KSEFClient\Contracts\DomSerializableInterface;
 use N1ebieski\KSEFClient\DTOs\Requests\Sessions\DaneFaKorygowanej;
 use N1ebieski\KSEFClient\DTOs\Requests\Sessions\FakturaRR\Podmiot1K;
 use N1ebieski\KSEFClient\DTOs\Requests\Sessions\FakturaRR\Podmiot2K;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\NrFaKorygowany;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\OkresFaKorygowanej;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\PrzyczynaKorekty;
-use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\TypKorekty;
 use N1ebieski\KSEFClient\Support\AbstractDTO;
 use N1ebieski\KSEFClient\Support\Optional;
 use N1ebieski\KSEFClient\Validator\Rules\Array\MaxRule;
 use N1ebieski\KSEFClient\Validator\Rules\Array\MinRule;
 use N1ebieski\KSEFClient\Validator\Validator;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\FakturaRR\TypKorekty;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\NrFaKorygowany;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\OkresFaKorygowanej;
+use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\PrzyczynaKorekty;
+use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 
 final class KorektaGroup extends AbstractDTO implements DomSerializableInterface
 {

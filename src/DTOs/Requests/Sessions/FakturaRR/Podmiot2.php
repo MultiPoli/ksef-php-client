@@ -28,7 +28,7 @@ final class Podmiot2 extends AbstractDTO implements DomSerializableInterface
      * @param Podmiot1DaneIdentyfikacyjne $daneIdentyfikacyjne Element zawierający dane identyfikujące nabywcę (podatnika VAT czynnego): jego NIP oraz imię i nazwisko lub nazwę albo nazwę skróconą.
      * @param Adres $adres Element zawierający dane dotyczące adresu nabywcy (podatnika VAT czynnego).
      * @param Optional|AdresKoresp $adresKoresp Element zawierający dane dotyczące adresu korespondencyjnego nabywcy (podatnika VAT czynnego)
-     * @param Optional|array $daneKontaktowe Element zawierający dane kontaktowe nabywcy (podatnika VAT czynnego): adres e-mail oraz numer telefonu
+     * @param Optional|array<int, DaneKontaktowe> $daneKontaktowe Element zawierający dane kontaktowe nabywcy (podatnika VAT czynnego): adres e-mail oraz numer telefonu
      * @param Optional|StatusInfoPodatnika $statusInfoPodatnika Status nabywcy (podatnika VAT czynnego)
      */
     public function __construct(

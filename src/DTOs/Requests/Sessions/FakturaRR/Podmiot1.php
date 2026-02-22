@@ -28,7 +28,7 @@ final class Podmiot1 extends AbstractDTO implements DomSerializableInterface
      * @param Podmiot1DaneIdentyfikacyjne $daneIdentyfikacyjne Element zawierający dane identyfikujące dostawcę (rolnika ryczałtowego): jego NIP oraz imię i nazwisko lub nazwę albo nazwę skróconą.
      * @param Adres $adres Element zawierający dane dotyczące adresu dostawcy (rolnika ryczałtowego).
      * @param Optional|AdresKoresp $adresKoresp Element zawierający dane dotyczące adresu korespondencyjnego dostawcy (rolnika ryczałtowego)
-     * @param Optional|array $daneKontaktowe Element zawierający dane kontaktowe dostawcy (rolnika ryczałtowego): adres e-mail oraz numer telefonu
+     * @param Optional|array<int, DaneKontaktowe> $daneKontaktowe Element zawierający dane kontaktowe dostawcy (rolnika ryczałtowego): adres e-mail oraz numer telefonu
      * @param Optional|NrKontrahenta $nrKontrahenta Numer kontrahenta dla przypadków, w których dostawca posługuje się nim w umowie lub zamówieniu
      */
     public function __construct(

@@ -29,7 +29,7 @@ final class Faktura extends AbstractDTO implements XmlSerializableInterface, Dom
      * @param Podmiot1 $podmiot1 Zawiera informacje, które charakteryzują dostawcę (tj. rolnika ryczałtowego).
      * @param Podmiot2 $podmiot2 Zawiera informacje, które charakteryzują nabywcę (tj. podatnika VAT czynnego będącego wystawcą faktury VAT RR/ faktury VAT RR KOREKTA).
      * @param FakturaRR $fakturaRR Zawiera szczegółowe informacje dotyczące nabycia dokumentowanego fakturą VAT RR/ fakturą VAT RR KOREKTA. W szczególności są to elementy faktury wynikające z treści obowiązujących przepisów (kwoty i pozycje faktury), jak również elementy dodatkowe dotyczące m.in. formy płatności, numerów rachunków bankowych oraz dodatkowych odliczeń lub obciążeń
-     * @param Optional|array $podmiot3 Zawiera informacje, które charakteryzują podmiot/-y trzeci/-e (inny/-e niż dostawca i nabywca), związany/-e z fakturą VAT RR/ fakturą VAT RR KOREKTA [element fakultatywny].
+     * @param Optional|array<int, Podmiot3> $podmiot3 Zawiera informacje, które charakteryzują podmiot/-y trzeci/-e (inny/-e niż dostawca i nabywca), związany/-e z fakturą VAT RR/ fakturą VAT RR KOREKTA [element fakultatywny].
      * @param Optional|Stopka $stopka Zawiera pozostałe informacje na fakturze VAT RR/ fakturze VAT RR KOREKTA np. stopkę faktury, numer KRS, REGON [element fakultatywny].
      */
     public function __construct(

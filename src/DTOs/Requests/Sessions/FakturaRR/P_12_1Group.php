@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace N1ebieski\KSEFClient\DTOs\Requests\Sessions\FakturaRR;
 
 use DOMDocument;
-use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 use N1ebieski\KSEFClient\Contracts\DomSerializableInterface;
 use N1ebieski\KSEFClient\Support\AbstractDTO;
 use N1ebieski\KSEFClient\Support\Optional;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\FakturaRR\P_12_1;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\FakturaRR\P_12_1W;
 use N1ebieski\KSEFClient\ValueObjects\Requests\Sessions\FakturaRR\P_12_2;
+use N1ebieski\KSEFClient\ValueObjects\Requests\XmlNamespace;
 
 final class P_12_1Group extends AbstractDTO implements DomSerializableInterface
 {

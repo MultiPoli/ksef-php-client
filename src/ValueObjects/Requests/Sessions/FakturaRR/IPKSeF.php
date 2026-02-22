@@ -8,6 +8,7 @@ use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
 use N1ebieski\KSEFClient\Validator\Rules\String\MaxRule;
 use N1ebieski\KSEFClient\Validator\Rules\String\MinRule;
+use N1ebieski\KSEFClient\Validator\Rules\String\RegexRule;
 use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
@@ -19,7 +20,8 @@ final class IPKSeF extends AbstractValueObject implements ValueAwareInterface, S
     {
         Validator::validate($value, [
             new MinRule(1),
-            new MaxRule(20),
+            new MaxRule(13),
+            new RegexRule('/^[0-9]{3}[a-zA-Z0-9]{10}$/')
         ]);
 
         $this->value = $value;
