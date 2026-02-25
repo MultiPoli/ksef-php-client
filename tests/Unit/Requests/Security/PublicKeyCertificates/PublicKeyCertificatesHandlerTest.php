@@ -73,11 +73,10 @@ test('fetches from source and saves to cache when cache has no value', function 
     $cacheStub->shouldReceive('get')->once()->andReturn(null);
     $cacheStub->shouldReceive('set')
         ->once()
-        ->withArgs(function (string $key, mixed $value, int $ttl): bool {
-            return $key === ConfigInterface::PUBLIC_KEY_CERTIFICATES_CACHE_KEY
+        ->withArgs(fn (string $key, mixed $value, int $ttl): bool =>
+            $key === ConfigInterface::PUBLIC_KEY_CERTIFICATES_CACHE_KEY
                 && $value instanceof PublicKeyCertificatesResponse
-                && $ttl === 43200;
-        })
+                && $ttl === 43200)
         ->andReturn(true);
 
     $response = $this->createClientStub($responseFixture, $httpClientStub, $cacheStub)
