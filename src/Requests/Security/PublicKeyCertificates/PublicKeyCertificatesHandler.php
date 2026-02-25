@@ -6,7 +6,6 @@ namespace N1ebieski\KSEFClient\Requests\Security\PublicKeyCertificates;
 
 use N1ebieski\KSEFClient\Contracts\ConfigInterface;
 use N1ebieski\KSEFClient\Contracts\HttpClient\HttpClientInterface;
-use N1ebieski\KSEFClient\Contracts\Requests\Security\PublicKeyCertificates\PublicKeyCertificatesResponseInterface;
 use N1ebieski\KSEFClient\DTOs\Config;
 use N1ebieski\KSEFClient\DTOs\HttpClient\Request;
 use N1ebieski\KSEFClient\Requests\AbstractHandler;
@@ -31,7 +30,7 @@ final class PublicKeyCertificatesHandler extends AbstractHandler
 
         $response = $this->cache->get(ConfigInterface::PUBLIC_KEY_CERTIFICATES_CACHE_KEY);
 
-        if ($response instanceof PublicKeyCertificatesResponseInterface) {
+        if ($response instanceof PublicKeyCertificatesResponse) {
             return $response;
         }
 

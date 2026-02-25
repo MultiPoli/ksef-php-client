@@ -61,9 +61,9 @@ abstract class AbstractTestCase extends TestCase
         ?HttpClientInterface $httpClientStub = null,
         ?CacheInterface $cacheStub = null
     ): ClientResourceInterface {
-        /** @var MockInterface&HttpClientInterface $httpClientStub */
         $httpClientStub ??= $this->createHttpClientStub($responseFixture);
 
+        /** @var MockInterface&HttpClientInterface $httpClientStub */
         return new ClientResource(
             client: $httpClientStub,
             config: new Config(
