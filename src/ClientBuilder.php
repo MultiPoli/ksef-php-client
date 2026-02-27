@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace N1ebieski\KSEFClient;
 
+use CuyZ\Valinor\Cache\Cache;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Http\Discovery\Psr18ClientDiscovery;
@@ -68,6 +69,8 @@ final class ClientBuilder
     private ExceptionHandlerInterface $exceptionHandler;
 
     private ?CacheInterface $cache = null;
+
+    private ?Cache $valinorCache = null;
 
     private Mode $mode = Mode::Production;
 
@@ -315,6 +318,13 @@ final class ClientBuilder
         return $this;
     }
 
+    public function withValinorCache(Cache $cache): self
+    {
+        $this->valinorCache = $cache;
+
+        return $this;
+    }
+
     public function build(): ClientResource
     {
         $config = new Config(
@@ -342,7 +352,8 @@ final class ClientBuilder
             config: $config,
             exceptionHandler: $this->exceptionHandler,
             logger: $this->logger,
-            cache: $this->cache
+            cache: $this->cache,
+            valinorCache: $this->valinorCache
         );
 
         if ($this->encryptionKey instanceof EncryptionKey) {
