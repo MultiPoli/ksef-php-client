@@ -20,7 +20,8 @@ enum FormCode: string implements EnumInterface
     public function getSchemaVersion(): string
     {
         return match ($this) {
-            self::Fa3, self::FaRr1 => '1-0E',
+            self::Fa3 => '1-0E',
+            self::FaRr1 => '1-1E',
             self::Pef3, self::KorPef3 => '2-1',
         };
     }
