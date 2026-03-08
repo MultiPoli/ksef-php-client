@@ -16,5 +16,5 @@ enum XmlNamespace: string
 
     case Fa3 = 'http://crd.gov.pl/wzor/2025/06/25/13775/';
 
-    case FaRr1 = 'http://crd.gov.pl/wzor/2026/02/17/14164/';
+    case FaRr1 = 'http://crd.gov.pl/wzor/2026/03/06/14189/';
 }
