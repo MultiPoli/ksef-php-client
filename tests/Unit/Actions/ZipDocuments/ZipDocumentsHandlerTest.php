@@ -26,7 +26,7 @@ test('documents are ordered by numbered names after unzip', function () use (&$t
         range(1, 100)
     );
 
-    $expectedContents = array_map(
+    $expectedFileContents = array_map(
         fn (array $document): string => Faktura::from($document, ValinorCacheFactory::make())->toXml(),
         $fixtures
     );
@@ -37,7 +37,7 @@ test('documents are ordered by numbered names after unzip', function () use (&$t
     );
 
     $handler = new ZipDocumentsHandler();
-    $zipContent = $handler->handle(new ZipDocumentsAction($expectedContents));
+    $zipContent = $handler->handle(new ZipDocumentsAction($expectedFileContents));
 
     $tempDir = sys_get_temp_dir();
     $tempFile = tempnam($tempDir, 'zip_test_');
@@ -74,5 +74,5 @@ test('documents are ordered by numbered names after unzip', function () use (&$t
     $fileContents = array_values($filesByName);
 
     expect($fileNames)->toBe($expectedFileNames);
-    expect($fileContents)->toBe($expectedContents);
+    expect($fileContents)->toBe($expectedFileContents);
 });
