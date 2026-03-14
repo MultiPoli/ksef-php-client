@@ -8,6 +8,9 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use N1ebieski\KSEFClient\Contracts\ValueAwareInterface;
 use N1ebieski\KSEFClient\Support\AbstractValueObject;
+use N1ebieski\KSEFClient\Validator\Rules\Date\AfterRule;
+use N1ebieski\KSEFClient\Validator\Rules\Date\BeforeRule;
+use N1ebieski\KSEFClient\Validator\Validator;
 use Stringable;
 
 final class P_4B extends AbstractValueObject implements ValueAwareInterface, Stringable
@@ -19,6 +22,11 @@ final class P_4B extends AbstractValueObject implements ValueAwareInterface, Str
         if ($value instanceof DateTimeInterface === false) {
             $value = new DateTimeImmutable($value);
         }
+
+        Validator::validate($value, [
+            new BeforeRule(new DateTimeImmutable('2050-01-01')),
+            new AfterRule(new DateTimeImmutable('2006-01-01')),
+        ]);
 
         $this->value = $value;
     }
