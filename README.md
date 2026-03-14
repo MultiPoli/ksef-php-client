@@ -2282,6 +2282,7 @@ vendor/bin/pest --parallel
 
 1. **23.03.2026** – Release of **v1.0.0-rc.\*** (from this point, avoid any breaking changes)
 2. **01.04.2026** – Release of **v1.0.0** (production ready)
+3. **End of 2026** – Release of **v2.0.0** (drop support for PHP 8.1–8.3 and upgrade package to features/dependencies of PHP 8.4)
 
 ## Special thanks
 
