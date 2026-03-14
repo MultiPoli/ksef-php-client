@@ -104,6 +104,8 @@ Main features:
                 - [Permissions Query EuEntities Grants](#permissions-query-euentities-grants)
             - [Permissions Query Personal](#permissions-query-personal)
                 - [Permissions Query Personal Grants](#permissions-query-personal-grants)
+            - [Permissions Query Persons](#permissions-query-persons)
+                - [Permissions Query Persons Grants](#permissions-query-persons-grants)
             - [Permissions Query Subunits](#permissions-query-subunits)
                 - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)
             - [Permissions Query SubordinateEntities](#permissions-query-subordinateentities)
@@ -1133,6 +1135,24 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-upr
 use N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->personal()->grants(
+    new GrantsRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query Persons
+
+<details>
+    <summary>
+        <h5>Permissions Query Persons Grants</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1persons~1grants/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Persons\Grants\GrantsRequest;
+
+$response = $client->permissions()->query()->persons()->grants(
     new GrantsRequest(...)
 )->object();
 ```
