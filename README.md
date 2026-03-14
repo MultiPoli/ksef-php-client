@@ -104,7 +104,9 @@ Main features:
             - [Permissions Query Personal](#permissions-query-personal)
                 - [Permissions Query Personal Grants](#permissions-query-personal-grants)
             - [Permissions Query Subunits](#permissions-query-subunits)
-                - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)                
+                - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)
+            - [Permissions Query SubordinateEntities](#permissions-query-subordinateentities)
+                - [Permissions Query SubordinateEntities Roles](#permissions-query-subordinateentities-roles)
         - [Permissions Operations](#permissions-operations)
             - [Permissions Operations Status](#permissions-operations-status)
         - [Permissions Attachments](#permissions-attachments)
@@ -1133,6 +1135,24 @@ use N1ebieski\KSEFClient\Requests\Permissions\Query\Subunits\Grants\GrantsReques
 
 $response = $client->permissions()->query()->subunits()->grants(
     new GrantsRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query SubordinateEntities
+
+<details>
+    <summary>
+        <h5>Permissions Query SubordinateEntities Roles</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1subordinate-entities~1roles/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\SubordinateEntities\Roles\RolesRequest;
+
+$response = $client->permissions()->query()->subordinateEntities()->roles(
+    new RolesRequest(...)
 )->object();
 ```
 </details>

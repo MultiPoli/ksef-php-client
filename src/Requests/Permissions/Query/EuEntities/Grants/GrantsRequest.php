@@ -30,7 +30,7 @@ final class GrantsRequest extends AbstractRequest implements BodyInterface, Para
 
     public function toBody(): array
     {
-        /** @var array<string, mixed> $data */
+        /** @var array<string, mixed> */
         return $this->toArray(only: [
             'vatUeIdentifier',
             'authorizedFingerprintIdentifier',
@@ -40,7 +40,7 @@ final class GrantsRequest extends AbstractRequest implements BodyInterface, Para
 
     public function toParameters(): array
     {
-        /** @var array<string, mixed> $data */
+        /** @var array<string, mixed> */
         return $this->toArray(only: [
             'pageOffset',
             'pageSize',
