@@ -194,10 +194,10 @@ composer require guzzlehttp/guzzle
 ### Client configuration
 
 ```php
-use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
-use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
-use Endroid\QrCode\Label\Font\OpenSans;
-use Endroid\QrCode\Label\Font\OpenSans;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\Factories\ValinorCacheFactory;
+use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 
 $client = (new ClientBuilder())
     ->withMode(Mode::Production) // Choice between: Test, Demo, Production
@@ -228,8 +228,8 @@ $client = (new ClientBuilder())
 Each resource supports mapping through both an array and a DTO, for example:
 
 ```php
-use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\RoundBlockSizeMode;
+use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\ValueObjects\ReferenceNumber;
 
 $authorisationStatusResponse = $client->auth()->status(new StatusRequest(
     referenceNumber: ReferenceNumber::from('20250508-EE-B395BBC9CD-A7DB4E6095-BD')
@@ -247,8 +247,8 @@ $authorisationStatusResponse = $client->auth()->status([
 For best performance, it is recommended to use caching:
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Action;
-use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Action;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Factories\ValinorCacheFactory;
 
 $client = (new ClientBuilder())
     ->withValinorCache(ValinorCacheFactory::make()) // Or other CuyZ\Valinor\Cache\Cache implementation
@@ -257,7 +257,7 @@ $client = (new ClientBuilder())
 or directly for a DTO:
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Handler;
+use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
 
 $faktura = Faktura::from([...], ValinorCacheFactory::make())
 ```
@@ -275,7 +275,7 @@ More information: https://valinor-php.dev/2.3/other/performance-and-caching/
     </summary>
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Handler;
+use N1ebieski\KSEFClient\ClientBuilder;
 
 $client = (new ClientBuilder())
     ->withKsefToken($_ENV['KSEF_KEY'])
@@ -292,7 +292,7 @@ $client = (new ClientBuilder())
     </summary>
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemAction;
+use N1ebieski\KSEFClient\ClientBuilder;
 
 $client = (new ClientBuilder())
     ->withCertificatePath($_ENV['PATH_TO_CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE'])
@@ -305,7 +305,7 @@ $client = (new ClientBuilder())
 or:
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemHandler;
+use N1ebieski\KSEFClient\ClientBuilder;
 
 $client = (new ClientBuilder())
     ->withCertificate($_ENV['CERTIFICATE'], $_ENV['CERTIFICATE_PASSPHRASE'])
@@ -322,10 +322,10 @@ $client = (new ClientBuilder())
     </summary>
 
 ```php
-use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
-use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
-use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerAction;
-use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerHandler;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Requests\Auth\DTOs\XadesSignature;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
 
 $client = (new ClientBuilder())->build();
 
@@ -408,7 +408,7 @@ $response = $client->auth()->challenge()->object();
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1auth~1xades-signature/post
 
 ```php
-use N1ebieski\KSEFClient\Actions\DecryptDocument\DecryptDocumentAction;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureRequest;
 
 $response = $client->auth()->xadesSignature(
     new XadesSignatureRequest(...)
@@ -418,7 +418,7 @@ $response = $client->auth()->xadesSignature(
 or:
 
 ```php
-use N1ebieski\KSEFClient\Actions\DecryptDocument\DecryptDocumentHandler;
+use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
 
 $response = $client->auth()->xadesSignature(
     new XadesSignatureXmlRequest(...)
@@ -434,7 +434,7 @@ $response = $client->auth()->xadesSignature(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Uzyskiwanie-dostepu/paths/~1auth~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
 
 $response = $client->auth()->status(
     new StatusRequest(...)
@@ -478,7 +478,7 @@ $response = $client->auth()->token()->refresh()->object();
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Aktywne-sesje/paths/~1auth~1sessions/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Requests\Auth\Sessions\List\ListRequest;
 
 $response = $client->auth()->sessions()->list(
     new ListRequest(...)
@@ -506,7 +506,7 @@ $response = $client->auth()->sessions()->revokeCurrent()->status();
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Aktywne-sesje/paths/~1auth~1sessions~1%7BreferenceNumber%7D/delete
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Requests\Auth\Sessions\Revoke\RevokeRequest;
 
 $response = $client->auth()->sessions()->revoke(
     new RevokeRequest(...)
@@ -524,7 +524,7 @@ $response = $client->auth()->sessions()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1limits~1context/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Requests\Limits\Context\ContextRequest;
 
 $response = $client->limits()->context(
     new ContextRequest(...)
@@ -540,7 +540,7 @@ $response = $client->limits()->context(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1limits~1subject/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Requests\Limits\Subject\SubjectRequest;
 
 $response = $client->limits()->subject(
     new SubjectRequest(...)
@@ -584,7 +584,7 @@ $response = $client->security()->publicKeyCertificates()->object();
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Requests\Sessions\List\ListRequest;
 
 $response = $client->sessions()->list(
     new ListRequest(...)
@@ -602,7 +602,7 @@ $response = $client->sessions()->list(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1invoices/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Requests\Sessions\Invoices\List\ListRequest;
 
 $response = $client->sessions()->invoices()->list(
     new ListRequest(...)
@@ -618,7 +618,7 @@ $response = $client->sessions()->invoices()->list(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1invoices~1failed/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Failed\FailedRequest;
 
 $response = $client->sessions()->invoices()->failed(
     new FailedRequest(...)
@@ -634,7 +634,7 @@ $response = $client->sessions()->invoices()->failed(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1invoices~1%7BinvoiceReferenceNumber%7D~1upo/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Upo\UpoRequest;
 
 $response = $client->sessions()->invoices()->upo(
     new UpoRequest(...)
@@ -650,7 +650,7 @@ $response = $client->sessions()->invoices()->upo(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1invoices~1ksef~1%7BksefNumber%7D~1upo/get
 
 ```php
-use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\Requests\Sessions\Invoices\KsefUpo\KsefUpoRequest;
 
 $response = $client->sessions()->invoices()->ksefUpo(
     new KsefUpoRequest(...)
@@ -666,7 +666,7 @@ $response = $client->sessions()->invoices()->ksefUpo(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1invoices~1%7BinvoiceReferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Status\StatusRequest;
 
 $response = $client->sessions()->invoices()->status(
     new StatusRequest(...)
@@ -684,7 +684,7 @@ $response = $client->sessions()->invoices()->status(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/paths/~1sessions~1online/post
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenRequest;
 
 $response = $client->sessions()->online()->open(
     new OpenRequest(...)
@@ -700,7 +700,7 @@ $response = $client->sessions()->online()->open(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/paths/~1sessions~1online~1%7BreferenceNumber%7D~1close/post
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Close\CloseRequest;
 
 $response = $client->sessions()->online()->close(
     new CloseRequest(...)
@@ -718,7 +718,7 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wysylka-interaktywna/path
 for DTO invoice:
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendRequest;
 
 $response = $client->sessions()->online()->send(
     new SendRequest(...)
@@ -728,7 +728,7 @@ $response = $client->sessions()->online()->send(
 for XML invoice:
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendXmlRequest;
 
 $response = $client->sessions()->online()->send(
     new SendXmlRequest(...)
@@ -748,7 +748,7 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wysylka-wsadowa/paths/~1s
 for DTOs invoices:
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendRequest;
 
 $response = $client->sessions()->batch()->openAndSend(
     new OpenAndSendRequest(...)
@@ -758,7 +758,7 @@ $response = $client->sessions()->batch()->openAndSend(
 for XMLs invoices:
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendXmlRequest;
 
 $response = $client->sessions()->batch()->openAndSend(
     new OpenAndSendXmlRequest(...)
@@ -768,7 +768,7 @@ $response = $client->sessions()->batch()->openAndSend(
 for ZIP invoices:
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendZipRequest;
 
 $response = $client->sessions()->batch()->openAndSend(
     new OpenAndSendZipRequest(...)
@@ -784,7 +784,7 @@ $response = $client->sessions()->batch()->openAndSend(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wysylka-wsadowa/paths/~1sessions~1batch~1%7BreferenceNumber%7D~1close/post
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Batch\Close\CloseRequest;
 
 $response = $client->sessions()->batch()->close(
     new CloseRequest(...)
@@ -800,7 +800,7 @@ $response = $client->sessions()->batch()->close(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Requests\Sessions\Status\StatusRequest;
 
 $response = $client->sessions()->status(
     new StatusRequest(...)
@@ -816,7 +816,7 @@ $response = $client->sessions()->status(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Status-wysylki-i-UPO/paths/~1sessions~1%7BreferenceNumber%7D~1upo~1%7BupoReferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\DTOs\DN;
+use N1ebieski\KSEFClient\Requests\Sessions\Upo\UpoRequest;
 
 $response = $client->sessions()->upo(
     new UpoRequest(...)
@@ -834,7 +834,7 @@ $response = $client->sessions()->upo(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1invoices~1ksef~1%7BksefNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadRequest;
 
 $response = $client->invoices()->download(
     new DownloadRequest(...)
@@ -852,7 +852,7 @@ $response = $client->invoices()->download(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1invoices~1query~1metadata/post
 
 ```php
-use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\Requests\Invoices\Query\Metadata\MetadataRequest;
 
 $response = $client->invoices()->query()->metadata(
     new MetadataRequest(...)
@@ -870,7 +870,7 @@ $response = $client->invoices()->query()->metadata(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1invoices~1exports/post
 
 ```php
-use N1ebieski\KSEFClient\DTOs\Requests\Auth\ContextIdentifierGroup;
+use N1ebieski\KSEFClient\Requests\Invoices\Exports\Init\InitRequest;
 
 $response = $client->invoices()->exports()->init(
     new InitRequest(...)
@@ -886,7 +886,7 @@ $response = $client->invoices()->exports()->init(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Pobieranie-faktur/paths/~1invoices~1exports~1%7BoperationReferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
+use N1ebieski\KSEFClient\Requests\Invoices\Exports\Status\StatusRequest;
 
 $response = $client->invoices()->exports()->status(
     new StatusRequest(...)
@@ -906,7 +906,7 @@ $response = $client->invoices()->exports()->status(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1persons~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
+use N1ebieski\KSEFClient\Requests\Permissions\Persons\Grants\GrantsRequest;
 
 $response = $client->permissions()->persons()->grants(
     new GrantsRequest(...)
@@ -924,7 +924,7 @@ $response = $client->permissions()->persons()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1entities~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
+use N1ebieski\KSEFClient\Requests\Permissions\Entities\Grants\GrantsRequest;
 
 $response = $client->permissions()->entities()->grants(
     new GrantsRequest(...)
@@ -942,7 +942,7 @@ $response = $client->permissions()->entities()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1authorizations~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\CertificateFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Authorizations\Grants\GrantsRequest;
 
 $response = $client->permissions()->authorizations()->grants(
     new GrantsRequest(...)
@@ -958,7 +958,7 @@ $response = $client->permissions()->authorizations()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Odbieranie-uprawnien/paths/~1permissions~1authorizations~1grants~1%7BpermissionId%7D/delete
 
 ```php
-use N1ebieski\KSEFClient\Factories\CertificateFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Authorizations\Revoke\RevokeRequest;
 
 $response = $client->permissions()->authorizations()->revoke(
     new RevokeRequest(...)
@@ -976,7 +976,7 @@ $response = $client->permissions()->authorizations()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1indirect~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\CertificateFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Indirect\Grants\GrantsRequest;
 
 $response = $client->permissions()->indirect()->grants(
     new GrantsRequest(...)
@@ -994,7 +994,7 @@ $response = $client->permissions()->indirect()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1subunits~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\CSRFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Subunits\Grants\GrantsRequest;
 
 $response = $client->permissions()->subunits()->grants(
     new GrantsRequest(...)
@@ -1012,7 +1012,7 @@ $response = $client->permissions()->subunits()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1eu-entities~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\EuEntities\Grants\GrantsRequest;
 
 $response = $client->permissions()->euEntities()->grants(
     new GrantsRequest(...)
@@ -1030,7 +1030,7 @@ $response = $client->permissions()->euEntities()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Nadawanie-uprawnien/paths/~1permissions~1eu-entities~1administration~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\EuEntities\Administration\Grants\GrantsRequest;
 
 $response = $client->permissions()->euEntities()->administration()->grants(
     new GrantsRequest(...)
@@ -1048,7 +1048,7 @@ $response = $client->permissions()->euEntities()->administration()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Odbieranie-uprawnien/paths/~1permissions~1common~1grants~1%7BpermissionId%7D/delete
 
 ```php
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Common\Revoke\RevokeRequest;
 
 $response = $client->permissions()->common()->revoke(
     new RevokeRequest(...)
@@ -1068,7 +1068,7 @@ $response = $client->permissions()->common()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1authorizations~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Authorizations\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->authorizations()->grants(
     new GrantsRequest(...)
@@ -1086,7 +1086,7 @@ $response = $client->permissions()->query()->authorizations()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1entities~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Factories\ValinorCacheFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Entities\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->entities()->grants(
     new GrantsRequest(...)
@@ -1102,7 +1102,7 @@ $response = $client->permissions()->query()->entities()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1entities~1roles/get
 
 ```php
-use N1ebieski\KSEFClient\Factories\ValinorCacheFactory;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Entities\Roles\RolesRequest;
 
 $response = $client->permissions()->query()->entities()->roles(
     new RolesRequest(...)
@@ -1120,7 +1120,7 @@ $response = $client->permissions()->query()->entities()->roles(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1eu-entities~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\DTOs\XadesSignature;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\EuEntities\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->euEntities()->grants(
     new GrantsRequest(...)
@@ -1138,7 +1138,7 @@ $response = $client->permissions()->query()->euEntities()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1personal~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\Sessions\List\ListRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->personal()->grants(
     new GrantsRequest(...)
@@ -1156,7 +1156,7 @@ $response = $client->permissions()->query()->personal()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1persons~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\Sessions\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Persons\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->persons()->grants(
     new GrantsRequest(...)
@@ -1174,7 +1174,7 @@ $response = $client->permissions()->query()->persons()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1subunits~1grants/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Subunits\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->subunits()->grants(
     new GrantsRequest(...)
@@ -1192,7 +1192,7 @@ $response = $client->permissions()->query()->subunits()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1subordinate-entities~1roles/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Query\SubordinateEntities\Roles\RolesRequest;
 
 $response = $client->permissions()->query()->subordinateEntities()->roles(
     new RolesRequest(...)
@@ -1210,7 +1210,7 @@ $response = $client->permissions()->query()->subordinateEntities()->roles(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Operacje/paths/~1permissions~1operations~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Operations\Status\StatusRequest;
 
 $response = $client->permissions()->operations()->status(
     new StatusRequest(...)
@@ -1228,7 +1228,7 @@ $response = $client->permissions()->operations()->status(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Operacje/paths/~1permissions~1attachments~1status/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
+use N1ebieski\KSEFClient\Requests\Permissions\Attachments\Status\StatusRequest;
 
 $response = $client->permissions()->attachments()->status(
     new StatusRequest(...)
@@ -1272,7 +1272,7 @@ $response = $client->certificates()->enrollments()->data()->object();
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1certificates~1enrollments/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Auth\XadesSignature\XadesSignatureXmlRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Send\SendRequest;
 
 $response = $client->certificates()->enrollments()->send(
     new SendRequest(...)
@@ -1288,7 +1288,7 @@ $response = $client->certificates()->enrollments()->send(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1certificates~1enrollments~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Send\SendRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Status\StatusRequest;
 
 $response = $client->certificates()->enrollments()->status(
     new StatusRequest(...)
@@ -1304,7 +1304,7 @@ $response = $client->certificates()->enrollments()->status(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1certificates~1retrieve/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Certificates\Enrollments\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Retrieve\RetrieveRequest;
 
 $response = $client->certificates()->retrieve(
     new RetrieveRequest(...)
@@ -1320,7 +1320,7 @@ $response = $client->certificates()->retrieve(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1certificates~1%7BcertificateSerialNumber%7D~1revoke/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Certificates\Query\QueryRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Revoke\RevokeRequest;
 
 $response = $client->certificates()->revoke(
     new RevokeRequest(...)
@@ -1336,7 +1336,7 @@ $response = $client->certificates()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Certyfikaty/paths/~1certificates~1query/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Certificates\Retrieve\RetrieveRequest;
+use N1ebieski\KSEFClient\Requests\Certificates\Query\QueryRequest;
 
 $response = $client->certificates()->query(
     new QueryRequest(...)
@@ -1354,7 +1354,7 @@ $response = $client->certificates()->query(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Tokeny-KSeF/paths/~1tokens/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Certificates\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Requests\Tokens\Create\CreateRequest;
 
 $response = $client->tokens()->create(
     new CreateRequest(...)
@@ -1370,7 +1370,7 @@ $response = $client->tokens()->create(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Tokeny-KSeF/paths/~1tokens/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Invoices\Download\DownloadRequest;
+use N1ebieski\KSEFClient\Requests\Tokens\List\ListRequest;
 
 $response = $client->tokens()->list(
     new ListRequest(...)
@@ -1386,7 +1386,7 @@ $response = $client->tokens()->list(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Tokeny-KSeF/paths/~1tokens~1%7BreferenceNumber%7D/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Invoices\Exports\Init\InitRequest;
+use N1ebieski\KSEFClient\Requests\Tokens\Status\StatusRequest;
 
 $response = $client->tokens()->list(
     new StatusRequest(...)
@@ -1402,7 +1402,7 @@ $response = $client->tokens()->list(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Tokeny-KSeF/paths/~1tokens~1%7BreferenceNumber%7D/delete
 
 ```php
-use N1ebieski\KSEFClient\Requests\Invoices\Exports\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Tokens\Revoke\RevokeRequest;
 
 $response = $client->tokens()->revoke(
     new RevokeRequest(...)
@@ -1420,7 +1420,7 @@ $response = $client->tokens()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Uslugi-Peppol/paths/~1peppol~1query/get
 
 ```php
-use N1ebieski\KSEFClient\Requests\Invoices\Query\Metadata\MetadataRequest;
+use N1ebieski\KSEFClient\Requests\Peppol\Query\QueryRequest;
 
 $response = $client->peppol()->query(
     new QueryRequest(...)
@@ -1440,7 +1440,7 @@ $response = $client->peppol()->query(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Limits\Context\ContextRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Grant\ApproveRequest;
 
 $response = $client->testdata()->attachment()->approve(
     new ApproveRequest(...)
@@ -1458,7 +1458,7 @@ $response = $client->testdata()->attachment()->approve(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1attachment~1revoke/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Limits\Subject\SubjectRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
 
 $response = $client->testdata()->attachment()->revoke(
     new RevokeRequest(...)
@@ -1477,7 +1477,7 @@ $response = $client->testdata()->attachment()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1person/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Peppol\Query\QueryRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Person\Create\CreateRequest;
 
 $response = $client->testdata()->person()->create(
     new CreateRequest(...)
@@ -1493,7 +1493,7 @@ $response = $client->testdata()->person()->create(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1person~1remove/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Attachments\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Person\Remove\RemoveRequest;
 
 $response = $client->testdata()->person()->remove(
     new RemoveRequest(...)
@@ -1511,7 +1511,7 @@ $response = $client->testdata()->person()->remove(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1context~1block/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Authorizations\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Context\Block\BlockRequest;
 
 $response = $client->testdata()->context()->block(
     new BlockRequest(...)
@@ -1527,7 +1527,7 @@ $response = $client->testdata()->context()->block(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1context~1unblock/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Authorizations\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Context\Unblock\UnblockRequest;
 
 $response = $client->testdata()->context()->unblock(
     new UnblockRequest(...)
@@ -1545,7 +1545,7 @@ $response = $client->testdata()->context()->unblock(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1permissions/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Common\Revoke\RevokeRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Grants\GrantsRequest;
 
 $response = $client->testdata()->permissions()->grants(
     new GrantsRequest(...)
@@ -1561,7 +1561,7 @@ $response = $client->testdata()->permissions()->grants(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1permissions~1revoke/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Entities\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Revoke\RevokeRequest;
 
 $response = $client->testdata()->permissions()->revoke(
     new RevokeRequest(...)
@@ -1583,7 +1583,7 @@ $response = $client->testdata()->permissions()->revoke(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1limits~1context~1session/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\EuEntities\Administration\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Limits\Context\Session\Limits\LimitsRequest;
 
 $response = $client->testdata()->limits()->context()->session()->limits(
     new LimitsRequest(...)
@@ -1599,7 +1599,7 @@ $response = $client->testdata()->limits()->context()->session()->limits(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1limits~1context~1session/delete
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\EuEntities\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Limits\Context\Session\Reset\ResetRequest;
 
 $response = $client->testdata()->limits()->context()->session()->reset(
     new ResetRequest(...)
@@ -1619,7 +1619,7 @@ $response = $client->testdata()->limits()->context()->session()->reset(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1limits~1subject~1certificate/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Indirect\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Limits\Subject\Certificate\Limits\LimitsRequest;
 
 $response = $client->testdata()->limits()->subject()->certificate()->limits(
     new LimitsRequest(...)
@@ -1635,7 +1635,7 @@ $response = $client->testdata()->limits()->subject()->certificate()->limits(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1limits~1subject~1certificate/delete
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Operations\Status\StatusRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\Limits\Subject\Certificate\Reset\ResetRequest;
 
 $response = $client->testdata()->limits()->subject()->certificate()->reset(
     new ResetRequest(...)
@@ -1653,7 +1653,7 @@ $response = $client->testdata()->limits()->subject()->certificate()->reset(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1rate-limits/post
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Persons\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Limits\LimitsRequest;
 
 $response = $client->testdata()->rateLimits()->limits(
     new LimitsRequest(...)
@@ -1669,7 +1669,7 @@ $response = $client->testdata()->rateLimits()->limits(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1rate-limits/delete
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Authorizations\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Reset\ResetRequest;
 
 $response = $client->testdata()->rateLimits()->reset(
     new ResetRequest(...)
@@ -1685,7 +1685,7 @@ $response = $client->testdata()->rateLimits()->reset(
 https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Limity-i-ograniczenia/paths/~1testdata~1rate-limits/delete
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Entities\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Production\ProductionRequest;
 
 $response = $client->testdata()->rateLimits()->production(
     new ProductionRequest(...)
@@ -1731,10 +1731,10 @@ https://github.com/N1ebieski/ksef-app-example.test
     </summary>
 
 ```php
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Entities\Roles\RolesRequest;
-use N1ebieski\KSEFClient\Requests\Permissions\Query\EuEntities\Grants\GrantsRequest;
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants\GrantsRequest;
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Persons\Grants\GrantsRequest;
+use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Action;
+use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Handler;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Factories\CertificateFactory;
 
 $certificate = file_get_contents(Utility::basePath('config/certificates/certificate.crt'));
 
@@ -1759,19 +1759,19 @@ file_put_contents(Utility::basePath('config/certificates/ksef-certificate.p12'),
 ```php
 <?php
 
-use N1ebieski\KSEFClient\Requests\Permissions\Query\SubordinateEntities\Roles\RolesRequest;
-use N1ebieski\KSEFClient\Requests\Permissions\Query\Subunits\Grants\GrantsRequest;
-use N1ebieski\KSEFClient\Requests\Permissions\Subunits\Grants\GrantsRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Batch\Close\CloseRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendXmlRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Batch\OpenAndSend\OpenAndSendZipRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Failed\FailedRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Invoices\KsefUpo\KsefUpoRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Invoices\List\ListRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Status\StatusRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Invoices\Upo\UpoRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\List\ListRequest;
+use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Action;
+use N1ebieski\KSEFClient\Actions\ConvertCertificateToPkcs12\ConvertCertificateToPkcs12Handler;
+use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemAction;
+use N1ebieski\KSEFClient\Actions\ConvertDerToPem\ConvertDerToPemHandler;
+use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerAction;
+use N1ebieski\KSEFClient\Actions\ConvertPemToDer\ConvertPemToDerHandler;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\DTOs\DN;
+use N1ebieski\KSEFClient\Factories\CSRFactory;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Factories\CertificateFactory;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\PrivateKeyType;
 
 $client = (new ClientBuilder())
     ->withMode(Mode::Test)
@@ -1841,20 +1841,20 @@ file_put_contents(Utility::basePath('config/certificates/ksef-certificate.p12'),
 ```php
 <?php
 
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Close\CloseRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Open\OpenRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Online\Send\SendXmlRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Status\StatusRequest;
-use N1ebieski\KSEFClient\Requests\Sessions\Upo\UpoRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Grant\ApproveRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Attachment\Revoke\RevokeRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Context\Block\BlockRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Context\Unblock\UnblockRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Limits\Context\Session\Limits\LimitsRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Limits\Context\Session\Reset\ResetRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Limits\Subject\Certificate\Limits\LimitsRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Limits\Subject\Certificate\Reset\ResetRequest;
+use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
+use Endroid\QrCode\Label\Font\OpenSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
+use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\Requests\KsefNumber;
 
 $encryptionKey = EncryptionKeyFactory::makeRandom();
 
@@ -1951,10 +1951,10 @@ file_put_contents(Utility::basePath("var/qr/code1.png"), $qrCodes->code1->raw);
 Install [n1ebieski/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
-use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Grants\GrantsRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Revoke\RevokeRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Person\Create\CreateRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\Person\Remove\RemoveRequest;
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\ValueObjects\KsefFeInvoiceConverterPath;
 
 // Send an invoice using example https://github.com/N1ebieski/ksef-php-client?tab=readme-ov-file#send-an-invoice-check-for-upo-and-generate-qr-code
 
@@ -1988,10 +1988,10 @@ Read https://ksef.podatki.gov.pl/informacje-ogolne-ksef-20/potwierdzenie-transak
 Install [n1ebieski/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
-use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Limits\LimitsRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Production\ProductionRequest;
-use N1ebieski\KSEFClient\Requests\Testdata\RateLimits\Reset\ResetRequest;
-use N1ebieski\KSEFClient\Requests\Tokens\Create\CreateRequest;
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\ValueObjects\KsefFeInvoiceConverterPath;
 
 // Create an online invoice using example https://github.com/N1ebieski/ksef-php-client?tab=readme-ov-file#send-an-invoice-check-for-upo-and-generate-qr-code
 
@@ -2018,11 +2018,11 @@ file_put_contents(Utility::basePath("var/pdf/CONFIRMATION-{$faktura->fa->p_2->va
 ```php
 <?php
 
-use N1ebieski\KSEFClient\Requests\Tokens\List\ListRequest;
-use N1ebieski\KSEFClient\Requests\Tokens\Revoke\RevokeRequest;
-use N1ebieski\KSEFClient\Requests\Tokens\Status\StatusRequest;
-use N1ebieski\KSEFClient\Requests\ValueObjects\ReferenceNumber;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
 use N1ebieski\KSEFClient\Support\Utility;
+use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
 
 $encryptionKey = EncryptionKeyFactory::makeRandom();
 
@@ -2090,22 +2090,22 @@ $upo = file_get_contents($statusResponse->upo->pages[0]->downloadUrl);
 ```php
 <?php
 
+use Endroid\QrCode\Builder\Builder as QrCodeBuilder;
+use Endroid\QrCode\Label\Font\OpenSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+use N1ebieski\KSEFClient\Actions\ConvertEcdsaDerToRaw\ConvertEcdsaDerToRawHandler;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesAction;
+use N1ebieski\KSEFClient\Actions\GenerateQRCodes\GenerateQRCodesHandler;
+use N1ebieski\KSEFClient\DTOs\QRCodes;
+use N1ebieski\KSEFClient\DTOs\Requests\Auth\ContextIdentifierGroup;
+use N1ebieski\KSEFClient\DTOs\Requests\Sessions\Faktura;
+use N1ebieski\KSEFClient\Factories\CertificateFactory;
 use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Support\Utility;
-use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
-use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
 use N1ebieski\KSEFClient\Testing\Fixtures\DTOs\Requests\Sessions\FakturaSprzedazyTowaruFixture;
 use N1ebieski\KSEFClient\ValueObjects\CertificatePath;
 use N1ebieski\KSEFClient\ValueObjects\CertificateSerialNumber;
-use N1ebieski\KSEFClient\ValueObjects\KsefFeInvoiceConverterPath;
-use N1ebieski\KSEFClient\ValueObjects\KsefFeInvoiceConverterPath;
+use N1ebieski\KSEFClient\ValueObjects\Mode;
+use N1ebieski\KSEFClient\ValueObjects\NIP;
 
 $nip = 'NIP_NUMBER';
 
@@ -2165,10 +2165,10 @@ file_put_contents(Utility::basePath("var/qr/code2.png"), $qrCodes->code2->raw);
 Install [n1ebieski/ksef-pdf-generator](https://github.com/N1ebieski/ksef-pdf-generator/tree/feature/cli)
 
 ```php
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFAction;
+use N1ebieski\KSEFClient\Actions\GeneratePDF\GeneratePDFHandler;
+use N1ebieski\KSEFClient\Support\Utility;
 use N1ebieski\KSEFClient\ValueObjects\KsefFeInvoiceConverterPath;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
 
 // Create an offline invoice using example https://github.com/N1ebieski/ksef-php-client?tab=readme-ov-file#create-an-offline-invoice-and-generate-both-qr-codes
 
@@ -2195,12 +2195,12 @@ file_put_contents(Utility::basePath("var/pdf/{$faktura->fa->p_2->value}.pdf"), $
 ```php
 <?php
 
+use N1ebieski\KSEFClient\Actions\DecryptDocument\DecryptDocumentAction;
+use N1ebieski\KSEFClient\Actions\DecryptDocument\DecryptDocumentHandler;
+use N1ebieski\KSEFClient\ClientBuilder;
+use N1ebieski\KSEFClient\Factories\EncryptionKeyFactory;
+use N1ebieski\KSEFClient\Support\Utility;
 use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\Mode;
-use N1ebieski\KSEFClient\ValueObjects\NIP;
-use N1ebieski\KSEFClient\ValueObjects\PrivateKeyType;
-use N1ebieski\KSEFClient\ValueObjects\Requests\KsefNumber;
 
 $encryptionKey = EncryptionKeyFactory::makeRandom();
 
