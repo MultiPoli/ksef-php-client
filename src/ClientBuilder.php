@@ -98,6 +98,10 @@ final class ClientBuilder
 
     private int $cacheTTL = 43200;
 
+    private int $retryBackoff = 10;
+
+    private int $retryUntil = 120;
+
     public function __construct()
     {
         $this->httpClient = ClientFactory::make(Psr18ClientDiscovery::find());
@@ -325,6 +329,20 @@ final class ClientBuilder
         return $this;
     }
 
+    /**
+     * Sets retry timing for checking authorisation status during auto authorisation.
+     *
+     * @param int $retryBackoff Delay in seconds between retries.
+     * @param int $retryUntil Maximum total retry time in seconds.
+     */
+    public function withRetryTiming(int $retryBackoff = 10, int $retryUntil = 120): self
+    {
+        $this->retryBackoff = $retryBackoff;
+        $this->retryUntil = $retryUntil;
+
+        return $this;
+    }
+
     public function build(): ClientResource
     {
         $config = new Config(
@@ -395,7 +413,7 @@ final class ClientBuilder
                         context: $authorisationStatusResponse
                     ));
                 }
-            });
+            }, $this->retryBackoff, $this->retryUntil);
 
             /** @var object{refreshToken: object{token: string, validUntil: string}, accessToken: object{token: string, validUntil: string}} $authorisationTokenResponse */
             $authorisationTokenResponse = $client->auth()->token()->redeem()->object();
