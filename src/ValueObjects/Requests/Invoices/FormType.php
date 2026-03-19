@@ -12,5 +12,5 @@ enum FormType: string implements EnumInterface
 
     case PEF = 'PEF';
 
-    case RR = 'RR';
+    case FA_RR = 'FA_RR';
 }

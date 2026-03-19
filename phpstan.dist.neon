@@ -23,6 +23,7 @@ parameters:
 		- '#^Call to an undefined method Pest\\Expectation<array<string, mixed>\|object\|null>::toBeFixture\(\).$#'
 		- '#^Call to an undefined method Pest\\Expectation<\(Closure\)\|null>::toBeExceptionFixture\(\).$#'
 		- '#^Call to an undefined method Pest\\PendingCalls\\TestCall\|Pest\\Support\\HigherOrderTapProxy::throws\(\).$#'
+		- '#^Cannot call method (withHash|withMGFHash|withSaltLength|sign|encrypt)\(\) on mixed.$#'
 		-
 			message: '#Parameter \#1 \$exception of method Pest\\Mixins\\Expectation<\(Closure\)\|null>::toThrow\(\) expects \(Closure\(Throwable\):\s+mixed\)\|string\|Throwable, Closure\([A-Za-z0-9_\\\\]+Exception\): true given#'
 			path: tests/*     
