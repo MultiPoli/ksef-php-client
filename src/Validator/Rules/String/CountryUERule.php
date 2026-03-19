@@ -19,7 +19,7 @@ final class CountryUERule extends AbstractRule
 
     public function handle(string $value, ?string $attribute = null): void
     {
-        if ( ! in_array($value, self::CODES)) {
+        if ( ! in_array($value, self::CODES, true)) {
             $this->throwRuleValidationException('Invalid country code.', $attribute);
         }
     }
