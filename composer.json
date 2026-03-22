@@ -1,6 +1,12 @@
 {
     "name": "n1ebieski/ksef-php-client",
     "description": "PHP API client that allows you to interact with the API Krajowego Systemu e-Faktur",
+    "keywords": [
+        "ksef",
+        "krajowy system e-faktur",
+        "ksef php",
+        "ksef php client"
+    ],
     "version": "1.0.0-rc.1",
     "license": "MIT",
     "authors": [
@@ -62,7 +68,7 @@
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "build": [
