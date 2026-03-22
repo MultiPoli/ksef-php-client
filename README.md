@@ -182,7 +182,7 @@ Main features:
 First, install `ksef-php-client` via the [Composer](https://getcomposer.org/) package manager:
 
 ```bash
-composer require n1ebieski/ksef-php-client
+composer require n1ebieski/ksef-php-client:^1.0
 ```
 
 Ensure that the `php-http/discovery` composer plugin is allowed to run or install a client manually if your project does not already have a PSR-18 client integrated.
