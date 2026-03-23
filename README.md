@@ -22,7 +22,7 @@ Main features:
 
 |  KSEF Version  |     Branch     | Release Version |
 |:--------------:|:--------------:|:---------------:|
-|       2.0      |      main      |      ^0.3       |
+|       2.0      |      main      |      ^1.0       |
 |       1.0      |      0.2.x     |      0.2.*      |
 
 ## Table of Contents
@@ -99,10 +99,17 @@ Main features:
                 - [Permissions Query Authorizations Grants](#permissions-query-authorizations-grants)        
             - [Permissions Query Entities](#permissions-query-entities)
                 - [Permissions Query Entities Grants](#permissions-query-entities-grants)
+                - [Permissions Query Entities Roles](#permissions-query-entities-roles)
+            - [Permissions Query EuEntities](#permissions-query-euentities)
+                - [Permissions Query EuEntities Grants](#permissions-query-euentities-grants)
             - [Permissions Query Personal](#permissions-query-personal)
                 - [Permissions Query Personal Grants](#permissions-query-personal-grants)
+            - [Permissions Query Persons](#permissions-query-persons)
+                - [Permissions Query Persons Grants](#permissions-query-persons-grants)
             - [Permissions Query Subunits](#permissions-query-subunits)
-                - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)                
+                - [Permissions Query Subunits Grants](#permissions-query-subunits-grants)
+            - [Permissions Query SubordinateEntities](#permissions-query-subordinateentities)
+                - [Permissions Query SubordinateEntities Roles](#permissions-query-subordinateentities-roles)
         - [Permissions Operations](#permissions-operations)
             - [Permissions Operations Status](#permissions-operations-status)
         - [Permissions Attachments](#permissions-attachments)
@@ -121,6 +128,8 @@ Main features:
         - [Tokens List](#tokens-list)
         - [Tokens Status](#tokens-status)
         - [Tokens Revoke](#tokens-revoke)
+    - [Peppol](#peppol)
+        - [Peppol Query](#peppol-query)
     - [Testdata](#testdata)
         - [Testdata Attachment](#testdata-attachment)
           - [Testdata Attachment Approve](#testdata-attachment-approve)
@@ -131,6 +140,9 @@ Main features:
         - [Testdata Context](#testdata-context)
             - [Testdata Context Block](#testdata-context-block)
             - [Testdata Context Unblock](#testdata-context-unblock)
+        - [Testdata Permissions](#testdata-permissions)
+            - [Testdata Permissions Grants](#testdata-permissions-grants)
+            - [Testdata Permissions Revoke](#testdata-permissions-revoke)
         - [Testdata Limits](#testdata-limits)
             - [Testdata Limits Context](#testdata-limits-context)
                 - [Testdata Limits Context Session](#testdata-limits-context-session)
@@ -170,7 +182,7 @@ Main features:
 First, install `ksef-php-client` via the [Composer](https://getcomposer.org/) package manager:
 
 ```bash
-composer require n1ebieski/ksef-php-client
+composer require n1ebieski/ksef-php-client:^1.0
 ```
 
 Ensure that the `php-http/discovery` composer plugin is allowed to run or install a client manually if your project does not already have a PSR-18 client integrated.
@@ -207,6 +219,7 @@ $client = (new ClientBuilder())
     ->withIdentifier('NIP_NUMBER') // Required for authorization. Optional otherwise
     ->withAsyncMaxConcurrency(8) // Optional. Maximum concurrent send operations during asynchronous sending
     ->withValidateXml(true) // Optional. XML document validation based on XSD schemas
+    ->withRetryTiming(10, 120) // Optional. Authorization status retry timing: backoff in seconds and max wait time in seconds
     ->build();
 ```
 
@@ -1081,6 +1094,40 @@ $response = $client->permissions()->query()->entities()->grants(
 ```
 </details>
 
+<details>
+    <summary>
+        <h5>Permissions Query Entities Roles</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1entities~1roles/get
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Entities\Roles\RolesRequest;
+
+$response = $client->permissions()->query()->entities()->roles(
+    new RolesRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query EuEntities
+
+<details>
+    <summary>
+        <h5>Permissions Query EuEntities Grants</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1eu-entities~1grants/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\EuEntities\Grants\GrantsRequest;
+
+$response = $client->permissions()->query()->euEntities()->grants(
+    new GrantsRequest(...)
+)->object();
+```
+</details>
+
 ##### Permissions Query Personal
 
 <details>
@@ -1094,6 +1141,24 @@ https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-upr
 use N1ebieski\KSEFClient\Requests\Permissions\Query\Personal\Grants\GrantsRequest;
 
 $response = $client->permissions()->query()->personal()->grants(
+    new GrantsRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query Persons
+
+<details>
+    <summary>
+        <h5>Permissions Query Persons Grants</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1persons~1grants/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\Persons\Grants\GrantsRequest;
+
+$response = $client->permissions()->query()->persons()->grants(
     new GrantsRequest(...)
 )->object();
 ```
@@ -1113,6 +1178,24 @@ use N1ebieski\KSEFClient\Requests\Permissions\Query\Subunits\Grants\GrantsReques
 
 $response = $client->permissions()->query()->subunits()->grants(
     new GrantsRequest(...)
+)->object();
+```
+</details>
+
+##### Permissions Query SubordinateEntities
+
+<details>
+    <summary>
+        <h5>Permissions Query SubordinateEntities Roles</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Wyszukiwanie-nadanych-uprawnien/paths/~1permissions~1query~1subordinate-entities~1roles/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Permissions\Query\SubordinateEntities\Roles\RolesRequest;
+
+$response = $client->permissions()->query()->subordinateEntities()->roles(
+    new RolesRequest(...)
 )->object();
 ```
 </details>
@@ -1327,6 +1410,24 @@ $response = $client->tokens()->revoke(
 ```
 </details>
 
+### Peppol
+
+<details>
+    <summary>
+        <h4>Peppol Query</h4>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Uslugi-Peppol/paths/~1peppol~1query/get
+
+```php
+use N1ebieski\KSEFClient\Requests\Peppol\Query\QueryRequest;
+
+$response = $client->peppol()->query(
+    new QueryRequest(...)
+)->object();
+```
+</details>
+
 ### Testdata
 
 #### Testdata Attachment
@@ -1430,6 +1531,40 @@ use N1ebieski\KSEFClient\Requests\Testdata\Context\Unblock\UnblockRequest;
 
 $response = $client->testdata()->context()->unblock(
     new UnblockRequest(...)
+)->status();
+```
+</details>
+
+#### Testdata Permissions
+
+<details>
+    <summary>
+        <h5>Testdata Permissions Grants</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1permissions/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Grants\GrantsRequest;
+
+$response = $client->testdata()->permissions()->grants(
+    new GrantsRequest(...)
+)->status();
+```
+</details>
+
+<details>
+    <summary>
+        <h5>Testdata Permissions Revoke</h5>
+    </summary>
+
+https://api-test.ksef.mf.gov.pl/docs/v2/index.html#tag/Dane-testowe/paths/~1testdata~1permissions~1revoke/post
+
+```php
+use N1ebieski\KSEFClient\Requests\Testdata\Permissions\Revoke\RevokeRequest;
+
+$response = $client->testdata()->permissions()->revoke(
+    new RevokeRequest(...)
 )->status();
 ```
 </details>
@@ -2146,13 +2281,15 @@ vendor/bin/pest --parallel
 
 ## Roadmap
 
-1. Implementation of other endpoints
-2. Prepare the package for release candidate
+1. **23.03.2026** – Release of **v1.0.0-rc.\*** (from this point, avoid any breaking changes unless KSeF team forces us)
+2. **01.04.2026** – Release of **v1.0.0** (production ready)
+3. **End of 2026** – The release of the major version drops support for PHP 8.1–8.3 and upgrades the package to utilize features and dependencies of PHP 8.4.
 
 ## Special thanks
 
 Special thanks to:
 
-- all the helpful people on the [4programmers.net](https://4programmers.net/Forum/Nietuzinkowe_tematy/355933-krajowy_system_e_faktur) forum
+- all the [contributors](https://github.com/N1ebieski/ksef-php-client/graphs/contributors)
+- all the helpful people on the [4programmers.net](https://4programmers.net/Forum/Nietuzinkowe_tematy/355933-krajowy_system_e_faktur) forum and in the [issue reports](https://github.com/N1ebieski/ksef-php-client/issues)
 - authors of the repository [grafinet/xades-tools](https://github.com/grafinet/xades-tools) for the Xades document signing tool
 - Łukasz Wojtanowski - author of a modified version of the official ksef-pdf-generator, available at [lukasz-wojtanowski-softvig/ksef-pdf-generator](https://github.com/lukasz-wojtanowski-softvig/ksef-pdf-generator/tree/feature/cli), which adds support for generating invoice and UPO PDFs via CLI

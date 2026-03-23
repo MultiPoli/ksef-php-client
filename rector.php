@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+;
 
 return \Rector\Config\RectorConfig::configure()
     ->withPaths([
@@ -26,7 +27,12 @@ return \Rector\Config\RectorConfig::configure()
             __DIR__ . '/src/Testing/Fixtures/Requests/AbstractResponseFixture.php',
             __DIR__ . '/src/Testing/Fixtures/DTOs/Requests/Sessions/AbstractFakturaFixture.php'
         ],
-        \Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector::class
+        \Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector::class,
+        \Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector::class => [
+            __DIR__ . '/src/Factories/EncryptedTokenFactory.php',
+            __DIR__ . '/src/Actions/SignDocument/SignDocumentHandler.php',
+            __DIR__ . '/src/Factories/EncryptedKeyFactory.php'
+        ]
     ])
     ->withComposerBased(phpunit: true)
     ->withImportNames(removeUnusedImports: true)

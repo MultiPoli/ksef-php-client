@@ -15,7 +15,7 @@ final class RegexRule extends AbstractRule
 
     public function handle(string $value, ?string $attribute = null): void
     {
-        if (in_array(preg_match($this->pattern, $value), [0, false])) {
+        if (in_array(preg_match($this->pattern, $value), [0, false], true)) {
             $this->throwRuleValidationException('Invalid regex format.', $attribute);
         }
     }

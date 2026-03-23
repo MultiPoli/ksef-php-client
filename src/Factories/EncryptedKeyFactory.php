@@ -19,7 +19,6 @@ final class EncryptedKeyFactory extends AbstractFactory
         /** @var RSAPublicKey $pub */
         $pub = PublicKeyLoader::load($ksefPublicKey->value);
 
-        //@phpstan-ignore-next-line
         $encryptedKey = $pub
             ->withPadding(RSA::ENCRYPTION_OAEP)
             ->withHash('sha256')
