@@ -40,7 +40,7 @@ final class GrantsRequest extends AbstractRequest implements ParametersInterface
     public function toBody(): array
     {
         /** @var array<string, mixed> $data */
-        $data = $this->toArray(only: ['queryType', 'authorizingIdentifierGroup', 'authorizedIdentifierGroup', 'permissionTypes']);
+        $data = $this->toArray(only: ['queryType', 'permissionTypes']);
 
         if ( ! $this->authorizingIdentifierGroup instanceof Optional) {
             $data['authorizingIdentifier'] = [
